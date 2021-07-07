@@ -1,5 +1,6 @@
-import { Datas } from '../classes/Datas.js';
+import { Datas } from "../classes/Datas.js";
 import { Display } from "../classes/Display.js";
+import { Print } from "./Print.js";
 export class FormInput {
     constructor() {
         this.form = document.getElementById("form");
@@ -14,20 +15,27 @@ export class FormInput {
         this.price = document.getElementById("price");
         this.quantity = document.getElementById("quantity");
         this.tva = document.getElementById("tva");
-        this.docContainer = document.getElementById('document-container');
-        this.hiddenDiv = document.getElementById('hiddenDiv');
-        this.btnPrint = document.getElementById('print');
+        this.docContainer = document.getElementById("document-container");
+        this.hiddenDiv = document.getElementById("hiddenDiv");
+        this.btnPrint = document.getElementById("print");
         this.submitFormListener();
+        this.printListener(this.btnPrint, this.docContainer);
     }
-    ;
     submitFormListener() {
         this.form.addEventListener("submit", this.handleFormSubmit.bind(this));
+    }
+    printListener(btn, docContainer) {
+        btn.addEventListener("click", (e) => {
+            let availableDoc;
+            availableDoc = new Print(docContainer);
+            availableDoc.print();
+        });
     }
     handleFormSubmit(e) {
         e.preventDefault();
         const inputs = this.inputDatas();
         if (Array.isArray(inputs)) {
-            const [type, firstName, lastName, address, country, town, zip, product, price, quantity, tva] = inputs;
+            const [type, firstName, lastName, address, country, town, zip, product, price, quantity, tva,] = inputs;
             // console.log(Type, firstName, lastName, address, country, town, zip, product, price, quantity, tva);
             let docData;
             let date = new Date();
@@ -53,9 +61,21 @@ export class FormInput {
         const quantity = this.quantity.valueAsNumber;
         const tva = this.tva.valueAsNumber;
         if (zip > 0 && price > 0 && quantity > 0 && tva > 0) {
-            return [type, firstName, lastName, address, country, town, zip, product, price, quantity, tva];
+            return [
+                type,
+                firstName,
+                lastName,
+                address,
+                country,
+                town,
+                zip,
+                product,
+                price,
+                quantity,
+                tva,
+            ];
         }
-        alert('Les valeurs numérique doivent être supérieur à 0');
+        alert("Les valeurs numérique doivent être supérieur à 0");
         return;
     }
 }
