@@ -1,7 +1,7 @@
 import { IHasSetItem } from '../interfaces/IHasSetItem.js'
 
 export class Storage implements IHasSetItem {
-
+  
   oldData: string[] = [];
 
   constructor(typeVal: string, htmlString: string) {
