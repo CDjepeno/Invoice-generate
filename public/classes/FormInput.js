@@ -3,6 +3,7 @@ import { Display } from "../classes/Display.js";
 import { Print } from "./Print.js";
 export class FormInput {
     constructor() {
+        // Gestion recupération d'élément dans le dom
         this.form = document.getElementById("form");
         this.type = document.getElementById("type");
         this.firstName = document.getElementById("firstName");
@@ -17,11 +18,17 @@ export class FormInput {
         this.tva = document.getElementById("tva");
         this.docContainer = document.getElementById("document-container");
         this.hiddenDiv = document.getElementById("hiddenDiv");
+        this.storedEl = document.getElementById("stored-data");
+        // Récupération des boutons
         this.btnPrint = document.getElementById("print");
         this.btnReload = document.getElementById("reload");
+        this.btnSroredInvoices = document.getElementById("stored-invoices");
+        this.btnSroredEstimates = document.getElementById("stored-estimates");
+        // Gestion des listeners
         this.submitFormListener();
         this.printListener(this.btnPrint, this.docContainer);
         this.deleteListener(this.btnReload);
+        this.getStroredDocsListener();
     }
     submitFormListener() {
         this.form.addEventListener("submit", this.handleFormSubmit.bind(this));
@@ -38,6 +45,37 @@ export class FormInput {
             document.location.reload();
             window.scrollTo(0, 0);
         });
+    }
+    getStroredDocsListener() {
+        this.btnSroredInvoices.addEventListener('click', this.getItems.bind(this, 'invoice'));
+        this.btnSroredEstimates.addEventListener('click', this.getItems.bind(this, 'estimate'));
+    }
+    getItems(docType) {
+        if (this.storedEl.hasChildNodes()) {
+            this.storedEl.innerHTML = "";
+        }
+        if (localStorage.getItem(docType)) {
+            let array;
+            array = localStorage.getItem(docType);
+            if (array != null && array.length > 2) {
+                let arrayData;
+                arrayData = JSON.parse(array);
+                arrayData.map((doc) => {
+                    let card = document.createElement('div');
+                    let cardBody = document.createElement('div');
+                    let cardClasses = ['card', 'mt-5'];
+                    let cardBodyClasses = 'card-body';
+                    card.classList.add(...cardClasses);
+                    cardBody.classList.add(cardBodyClasses);
+                    cardBody.innerHTML = doc;
+                    card.append(cardBody);
+                    this.storedEl.append(card);
+                });
+            }
+            else {
+                this.storedEl.innerHTML = '<div class="p-5">Aucune data disponible</div>';
+            }
+        }
     }
     handleFormSubmit(e) {
         e.preventDefault();

@@ -23,8 +23,12 @@ export class FormInput {
   hiddenDiv: HTMLDivElement;
   btnPrint: HTMLButtonElement;
   btnReload: HTMLButtonElement;
+  btnSroredInvoices: HTMLButtonElement;
+  btnSroredEstimates: HTMLButtonElement;
+  storedEl: HTMLDivElement;
 
   constructor() {
+    // Gestion recupération d'élément dans le dom
     this.form = document.getElementById("form") as HTMLFormElement;
     this.type = document.getElementById("type") as HTMLSelectElement;
     this.firstName = document.getElementById("firstName") as HTMLInputElement;
@@ -37,18 +41,23 @@ export class FormInput {
     this.price = document.getElementById("price") as HTMLInputElement;
     this.quantity = document.getElementById("quantity") as HTMLInputElement;
     this.tva = document.getElementById("tva") as HTMLInputElement;
-
     this.docContainer = document.getElementById(
       "document-container"
     ) as HTMLDivElement;
     this.hiddenDiv = document.getElementById("hiddenDiv") as HTMLDivElement;
+    this.storedEl = document.getElementById("stored-data") as HTMLDivElement;
 
+    // Récupération des boutons
     this.btnPrint = document.getElementById("print") as HTMLButtonElement;
     this.btnReload = document.getElementById("reload") as HTMLButtonElement;
-
+    this.btnSroredInvoices = document.getElementById("stored-invoices") as HTMLButtonElement;
+    this.btnSroredEstimates = document.getElementById("stored-estimates") as HTMLButtonElement;
+    
+    // Gestion des listeners
     this.submitFormListener();
     this.printListener(this.btnPrint, this.docContainer);
     this.deleteListener(this.btnReload);
+    this.getStroredDocsListener();
   }
 
   private submitFormListener(): void {
@@ -68,6 +77,44 @@ export class FormInput {
       document.location.reload()
       window.scrollTo(0,0)
     })
+  }
+
+  private getStroredDocsListener(): void {
+    this.btnSroredInvoices.addEventListener('click', this.getItems.bind(this, 'invoice') )
+    this.btnSroredEstimates.addEventListener('click', this.getItems.bind(this, 'estimate') )
+  }
+
+  private getItems(docType: string) {
+    if(this.storedEl.hasChildNodes()) {
+      this.storedEl.innerHTML = "";
+    }
+
+    if(localStorage.getItem(docType)) {
+      let array: string | null;
+      array = localStorage.getItem(docType);
+
+      if(array != null && array.length > 2) {
+        let arrayData: string[];
+
+        arrayData = JSON.parse(array);
+
+        arrayData.map((doc: string): void => {
+          let card: HTMLDivElement = document.createElement('div')
+          let cardBody: HTMLDivElement = document.createElement('div')
+          let cardClasses: string[] = ['card','mt-5'];
+          let cardBodyClasses: string = 'card-body';
+
+          card.classList.add(...cardClasses)
+          cardBody.classList.add(cardBodyClasses)
+
+          cardBody.innerHTML = doc;
+          card.append(cardBody)
+          this.storedEl.append(card)
+        })
+      } else {
+        this.storedEl.innerHTML = '<div class="p-5">Aucune data disponible</div>'
+      }
+    }
   }
 
   private handleFormSubmit(e: Event) {
