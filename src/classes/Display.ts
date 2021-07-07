@@ -1,5 +1,6 @@
 import { IHasHtmlFormat } from './../interfaces/IHasHtmlFormat';
 import { IHasRender } from '../interfaces/IHasRender';
+import { Storage } from '../classes/Storage.js'
 
 export class Display implements IHasRender {
   
@@ -16,6 +17,8 @@ export class Display implements IHasRender {
   render(docObj: IHasHtmlFormat, docType: string) {
     const htmlString: string = docObj.htmlFormat();
     this.container.innerHTML = htmlString
+
+    new Storage(docType, htmlString);
 
     if(docType === 'invoice') {
       this.btnPrint.innerText = 'Imprimer la facture'
