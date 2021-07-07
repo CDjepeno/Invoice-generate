@@ -1,4 +1,5 @@
 import { Datas } from '../classes/Datas.js';
+import { Display } from "../classes/Display.js";
 export class FormInput {
     constructor() {
         this.form = document.getElementById("form");
@@ -13,6 +14,8 @@ export class FormInput {
         this.price = document.getElementById("price");
         this.quantity = document.getElementById("quantity");
         this.tva = document.getElementById("tva");
+        this.docContainer = document.getElementById('document-container');
+        this.hiddenDiv = document.getElementById('hiddenDiv');
         this.submitFormListener();
     }
     submitFormListener() {
@@ -22,19 +25,21 @@ export class FormInput {
         e.preventDefault();
         const inputs = this.inputDatas();
         if (Array.isArray(inputs)) {
-            const [Type, firstName, lastName, address, country, town, zip, product, price, quantity, tva] = inputs;
+            const [type, firstName, lastName, address, country, town, zip, product, price, quantity, tva] = inputs;
             // console.log(Type, firstName, lastName, address, country, town, zip, product, price, quantity, tva);
             let docData;
             let date = new Date();
             docData = new Datas(...inputs, date);
-            console.log(docData.htmlFormat());
+            let template;
+            template = new Display(this.docContainer, this.hiddenDiv);
+            template.render(docData, type);
         }
         else {
             alert("ce n'est pas un tableau");
         }
     }
     inputDatas() {
-        const Type = this.type.value;
+        const type = this.type.value;
         const firstName = this.firstName.value;
         const lastName = this.lastName.value;
         const address = this.address.value;
@@ -46,7 +51,7 @@ export class FormInput {
         const quantity = this.quantity.valueAsNumber;
         const tva = this.tva.valueAsNumber;
         if (zip > 0 && price > 0 && quantity > 0 && tva > 0) {
-            return [Type, firstName, lastName, address, country, town, zip, product, price, quantity, tva];
+            return [type, firstName, lastName, address, country, town, zip, product, price, quantity, tva];
         }
         alert('Les valeurs numérique doivent être supérieur à 0');
         return;

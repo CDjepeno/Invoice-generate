@@ -1,5 +1,7 @@
 import { IHasHtmlFormat } from "../interfaces/IHasHtmlFormat";
 import {Datas} from '../classes/Datas.js'
+import { IHasRender } from '../interfaces/IHasRender';
+import { Display } from "../classes/Display.js";
 
 export class FormInput {
   form: HTMLFormElement;
@@ -14,6 +16,8 @@ export class FormInput {
   price: HTMLInputElement;
   quantity: HTMLInputElement;
   tva: HTMLInputElement;
+  docContainer: HTMLDivElement;
+  hiddenDiv: HTMLDivElement;
 
   constructor() {
     this.form = document.getElementById("form") as HTMLFormElement;
@@ -29,6 +33,9 @@ export class FormInput {
     this.quantity = document.getElementById("quantity") as HTMLInputElement;
     this.tva = document.getElementById("tva") as HTMLInputElement;
 
+    this.docContainer = document.getElementById('document-container') as HTMLDivElement
+    this.hiddenDiv = document.getElementById('hiddenDiv') as HTMLDivElement
+
     this.submitFormListener();
   }
 
@@ -42,7 +49,7 @@ export class FormInput {
     const inputs = this.inputDatas()
 
     if(Array.isArray(inputs)) {
-      const [Type, firstName, lastName, address, country, town, zip, product, price, quantity, tva] = inputs;
+      const [type, firstName, lastName, address, country, town, zip, product, price, quantity, tva] = inputs;
       // console.log(Type, firstName, lastName, address, country, town, zip, product, price, quantity, tva);
 
       let docData: IHasHtmlFormat;
@@ -50,8 +57,9 @@ export class FormInput {
 
       docData = new Datas(...inputs, date)
 
-      console.log(docData.htmlFormat())
-
+      let template: IHasRender;
+      template = new Display(this.docContainer, this.hiddenDiv)
+      template.render(docData, type)
     } else {
       alert("ce n'est pas un tableau")
     }
@@ -59,7 +67,7 @@ export class FormInput {
   }
 
   private inputDatas(): [string, string, string,string,string,string,number, string, number, number, number] | void {
-    const Type = this.type.value;
+    const type = this.type.value;
     const firstName = this.firstName.value;
     const lastName = this.lastName.value;
     const address = this.address.value;
@@ -72,7 +80,7 @@ export class FormInput {
     const tva = this.tva.valueAsNumber;
 
     if(zip > 0 && price > 0 && quantity > 0 && tva > 0) {
-      return [Type, firstName, lastName,address,country,town,zip, product, price, quantity, tva]
+      return [type, firstName, lastName,address,country,town,zip, product, price, quantity, tva]
     }
     alert('Les valeurs numérique doivent être supérieur à 0')
     return

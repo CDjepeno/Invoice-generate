@@ -24,7 +24,7 @@ export class Datas {
         return `
       <div class="row p-5">
           <div class="col-md-6">
-              <h2 class="text-left">LOGO</h2>
+              <h2 class="text-left"><img src="./CD-logo.jpg" width='150' height='150' ></img></h2>
           </div>
           <div class="col-md-6 text-right">
               <p class="font-weight-bold mb-1">${this.documentType === "invoice" ? "Facture" : "devis"}<span class="font-weight-normal">N° ${Math.floor(Math.random() * 101)}</span></p>
@@ -42,7 +42,7 @@ export class Datas {
 
           <div class="col-sm-6 text-right">
               <p class="font-weight-bold">Informations du client</p>
-              <p class="mb-1">Mr/Mme ${this.lastName} ${this.lastName}</p>
+              <p class="mb-1">Mr/Mme ${this.lastName} ${this.firstName}</p>
               <p class="mb-1">${this.address}</p>
               <p>${this.zip}</p>
               <p>${this.town}</p>
