@@ -1,4 +1,4 @@
-import { IHasHtmlFormat } from "../interfaces/IHasHtmlFormat.js";
+import { IHasHtmlFormat } from "../interfaces/IHasHtmlFormat";
 
 export class Datas implements IHasHtmlFormat {
   constructor(

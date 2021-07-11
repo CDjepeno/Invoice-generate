@@ -1,10 +1,10 @@
-import { Datas } from "../classes/Datas.js";
-import { Display } from "../classes/Display.js";
+import { Datas } from "../classes/Datas";
+import { Display } from "../classes/Display";
 
 import { IHasRender } from "../interfaces/IHasRender";
 import { IHasHtmlFormat } from "../interfaces/IHasHtmlFormat";
 import { IHasPrint } from "../interfaces/IHasPrint";
-import { Print } from "./Print.js";
+import { Print } from "./Print";
 
 export class FormInput {
   form: HTMLFormElement;

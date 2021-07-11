@@ -1,6 +1,6 @@
-import { IHasHtmlFormat } from './../interfaces/IHasHtmlFormat';
+import { IHasHtmlFormat } from '../interfaces/IHasHtmlFormat';
 import { IHasRender } from '../interfaces/IHasRender';
-import { Storage } from '../classes/Storage.js'
+import { Storage } from '../classes/Storage'
 
 export class Display implements IHasRender {
   

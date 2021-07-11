@@ -1,4 +1,4 @@
-import { IHasSetItem } from '../interfaces/IHasSetItem.js'
+import { IHasSetItem } from '../interfaces/IHasSetItem'
 
 export class Storage implements IHasSetItem {
   
